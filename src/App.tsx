@@ -1,24 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { RouteComponentProps } from "@reach/router";
+import React, { FunctionComponent } from "react";
+import "./App.css";
+import {
+  useFirestore,
+  useFirestoreCollectionData,
+  useFirestoreDocData,
+} from "reactfire";
 
-function App() {
+interface Props extends RouteComponentProps {}
+
+const App: FunctionComponent<Props> = (_props) => {
+  const gameRef = useFirestore().collection("games");
+  const games: any[] = useFirestoreCollectionData(
+    gameRef.orderBy('FirstName')
+  );
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      {games.map((m) => (
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          {m.FirstName} {m.LastName}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      ))}
     </div>
   );
 }
